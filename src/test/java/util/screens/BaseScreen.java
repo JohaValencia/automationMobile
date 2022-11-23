@@ -4,6 +4,7 @@ import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
+import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.Dimension;
@@ -82,6 +83,7 @@ public abstract class BaseScreen {
     public void click(AndroidElement element) {
         WebDriverWait wait = new WebDriverWait(driver, 15);
         wait.until(ExpectedConditions.visibilityOf(element));
+
         element.click();
     }
 
@@ -130,6 +132,21 @@ public abstract class BaseScreen {
         } catch (NoSuchElementException | TimeoutException e) {
             return false;
         }
+    }
+
+    public void swipeDown() {
+        Dimension dimension = driver.manage().window().getSize();
+        int height = dimension.getHeight();
+        int width = dimension.getWidth();
+        int x = width/2;
+        int bottom = (int)(height*0.80);
+        int top = (int)(height*0.20);
+        TouchAction touchscreen = new TouchAction(driver);
+        touchscreen.press(PointOption.point(x,bottom))
+                .waitAction(WaitOptions.waitOptions(Duration.ofMillis(200)))
+                .moveTo(PointOption.point(x, top))
+                .release()
+                .perform();
     }
 
 }

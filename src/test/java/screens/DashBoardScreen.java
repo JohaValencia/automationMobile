@@ -25,28 +25,59 @@ public class DashBoardScreen extends BaseScreen {
         super(driver);
     }
 
-    @AndroidFindBy(uiAutomator = "")
+    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"dismiss-icon\")")
     private AndroidElement dismissPreferenceUpdateButton;
 
-    @AndroidFindBy(uiAutomator = "")
+    @AndroidFindBy(uiAutomator = "new UiSelector().className(\"android.view.View\").textContains(\"Welcome to Disney Genie Service!\")")
     private AndroidElement dismissWelcome;
 
-    @HowToUseLocators(androidAutomation = ALL_POSSIBLE)
-    @AndroidFindBy(uiAutomator = "//android.widget.ImageView[contains(@content-desc,\"Map\")]")
+    //@HowToUseLocators(androidAutomation = ALL_POSSIBLE)
+    @AndroidFindBy(uiAutomator = "new UiSelector().resourceIdMatches(\".*tab_icon\").descriptionContains(\"Map\")")
     private AndroidElement mapButton;
+
+    @AndroidFindBy(uiAutomator = "new UiSelector().resourceIdMatches(\".*tab_icon\").descriptionContains(\"More\")")
+    private AndroidElement otherOptionsBtn;
+
+    @AndroidFindBy(uiAutomator = "new UiSelector().descriptionContains(\"Buy Tickets and Passes\")")
+    private AndroidElement plansBtn;
+
+  @AndroidFindBy(uiAutomator = "new UiSelector().descriptionContains(\"Check Dining Availability\")")
+  private AndroidElement reservationBtn;
+
 
     /**
      * @author Hans.Marquez
-     * Navigate to Login Screen from DashBoard Screen.
+     * Navigate to Log in Screen from DashBoard Screen.
      */
-    public MapScreen goToMapScreen() {
-        if (this.isElementAvailable(dismissWelcome, 25)){
-            click(dismissWelcome);
-        }
-        if (this.isElementAvailable(dismissPreferenceUpdateButton, 25)){
+
+    public void skipWelcome() {
+        if (this.isElementAvailable(dismissWelcome, 25)) {
             click(dismissPreferenceUpdateButton);
         }
+    }
+    public MapScreen goToMapScreen() {
+        skipWelcome();
         click(mapButton);
         return new MapScreen(driver);
     }
+
+    public ScreenOptions otherOptionsScreen() {
+        skipWelcome();
+        click(otherOptionsBtn);
+        return new ScreenOptions(driver);
+    }
+
+    public void clickAddPlans() {
+        click(plansBtn);
+    }
+
+    public boolean addPlansIsVisible() {
+        return isElementAvailable(plansBtn);
+    }
+
+    public boolean reservationIsVisible() {
+        return  isElementAvailable(reservationBtn);
+    }
+
+
 }

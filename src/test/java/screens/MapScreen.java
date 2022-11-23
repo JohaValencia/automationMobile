@@ -6,6 +6,9 @@ import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.HowToUseLocators;
 import util.screens.BaseScreen;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static io.appium.java_client.pagefactory.LocatorGroupStrategy.ALL_POSSIBLE;
 
 // TODO: Auto-generated Javadoc
@@ -27,7 +30,7 @@ public class MapScreen extends BaseScreen {
         super(driver);
     }
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceIdMatches(\".*categoryTitle\")")
+    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"com.disney.wdpro.dlr:id/categoryTitle\")")
     private AndroidElement categoryList;
 
     @HowToUseLocators(androidAutomation = ALL_POSSIBLE)
@@ -39,6 +42,11 @@ public class MapScreen extends BaseScreen {
     @AndroidFindBy(uiAutomator = "new UiSelector().resourceIdMatches(\".*toggleTitle.*\")")
     @AndroidFindBy(uiAutomator = "new UiSelector().textContains(\"Show List\")")
     private AndroidElement showListButton;
+    @AndroidFindBy(uiAutomator = "new UiSelector().className(\"android.widget.LinearLayout\\\").descriptionMatches(\\\".*button\\\")")
+    private List<AndroidElement> categories;
+
+    @AndroidFindBy(uiAutomator = "new UiSelector().className(android.widget.LinearLayout).descriptionStartsWith(\"Hotels\")")
+    private AndroidElement hotelCategories;
 
     /**
      * @author Hans.Marquez
@@ -63,5 +71,29 @@ public class MapScreen extends BaseScreen {
     public boolean showListIsDisplayed() {
         return isElementAvailable(showListButton);
     }
+
+    public void tapCategories() {
+        click(categoryList);
+    }
+
+    public boolean hotelsIsVisible() {
+        return isElementAvailable(hotelCategories);
+    }
+
+    public String getCategoryDefault() {
+        return categoryList.getText();
+    }
+
+    public boolean categoriesAreDifferent() {
+        List<String> partialCategories = new ArrayList<>();
+        for(AndroidElement i: categories) {
+            String category = i.getAttribute("desc").split(",")[0];
+            partialCategories.add(category);
+        } return partialCategories.stream().distinct().count() == partialCategories.size();
+
+    }
+
+
+
 
 }
